@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
+require("dotenv").config();  // Load .env file (written by deploy script)
 
 const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
