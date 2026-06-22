@@ -15,7 +15,7 @@ module.exports = {
     env: {
       NODE_ENV: 'production',
       PORT: '4247',
-      DEEPSEEK_API_KEY: 'SET_ON_DROPLET',
+      DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY || '',
       CORS_ORIGIN: 'https://cem888.ai',
       RATE_LIMIT_PER_MINUTE: '10'
     }
