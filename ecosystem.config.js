@@ -1,12 +1,13 @@
 // PM2 Ecosystem — CEM Concierge
 // Deploy: pm2 start ecosystem.config.js
 // Save:   pm2 save
+// Placeholders __DEPLOY_ROOT__ and __CORS_ORIGIN__ are replaced by deploy.yml
 
 module.exports = {
   apps: [{
     name: 'cem-concierge',
     script: 'server.js',
-    cwd: '[DEPLOY_PATH]',
+    cwd: '__DEPLOY_ROOT__/concierge',
     interpreter: 'node',
     exec_mode: 'fork',
     autorestart: true,
@@ -15,8 +16,7 @@ module.exports = {
     env: {
       NODE_ENV: 'production',
       PORT: '4247',
-      DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY || '',
-      CORS_ORIGIN: 'https://[REDACTED_DOMAIN]',
+      CORS_ORIGIN: '__CORS_ORIGIN__',
       RATE_LIMIT_PER_MINUTE: '10'
     }
   }]
