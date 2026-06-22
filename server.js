@@ -131,8 +131,15 @@ function getConfig(sid) {
 
 function updateConfig(sid, changes) {
   const cfg = getConfig(sid);
-  // Deep merge: arrays replace, strings/objects merge
+  // Field aliases (what concierge might say → what we store)
+  const ALIASES = { model: 'primaryModel', type: 'profileType', compModel: 'compressionModel', fallModel: 'fallbackModel', ctx: 'contextWindow' };
+  const normalized = {};
   for (const [key, val] of Object.entries(changes)) {
+    const target = ALIASES[key] || key;
+    normalized[target] = val;
+  }
+  // Deep merge: arrays replace, strings/objects merge
+  for (const [key, val] of Object.entries(normalized)) {
     if (key === "session_id" || key === "created") continue;
     if (Array.isArray(val)) {
       cfg[key] = val;
