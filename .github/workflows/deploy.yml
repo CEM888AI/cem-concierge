@@ -16,7 +16,7 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
             set -e
-            TARGET="/var/www/cem888.ai/concierge"
+            TARGET="[DEPLOY_PATH]"
             mkdir -p "$TARGET"
             cd "$TARGET"
 

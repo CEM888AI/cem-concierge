@@ -65,7 +65,7 @@ Returns service status.
 - All API keys via environment variables — never committed
 - Rate limited: 10 requests/min per IP
 - Message cap: 2,000 characters
-- CORS restricted to cem888.ai
+- CORS restricted to [REDACTED_DOMAIN]
 - Session history in-memory, auto-expires after 1hr
 
 ## Required Secrets (GitHub Actions)
@@ -81,5 +81,5 @@ Returns service status.
 |----------|---------|
 | `DEEPSEEK_API_KEY` | `sk-...` (set on droplet, never in repo) |
 | `PORT` | `4247` (default) |
-| `CORS_ORIGIN` | `https://cem888.ai` |
+| `CORS_ORIGIN` | `https://[REDACTED_DOMAIN]` |
 | `RATE_LIMIT_PER_MINUTE` | `10` |

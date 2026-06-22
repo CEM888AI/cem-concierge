@@ -3,7 +3,7 @@ const cors = require("cors");
 const crypto = require("crypto");
 
 const app = express();
-app.use(cors({ origin: process.env.CORS_ORIGIN || "https://cem888.ai" }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json({ limit: "16kb" }));
 
 // ━━━━━ CONFIG (all from env, never hardcoded) ━━━━━

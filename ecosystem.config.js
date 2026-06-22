@@ -6,7 +6,7 @@ module.exports = {
   apps: [{
     name: 'cem-concierge',
     script: 'server.js',
-    cwd: '/var/www/cem888.ai/concierge',
+    cwd: '[DEPLOY_PATH]',
     interpreter: 'node',
     exec_mode: 'fork',
     autorestart: true,
@@ -16,7 +16,7 @@ module.exports = {
       NODE_ENV: 'production',
       PORT: '4247',
       DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY || '',
-      CORS_ORIGIN: 'https://cem888.ai',
+      CORS_ORIGIN: 'https://[REDACTED_DOMAIN]',
       RATE_LIMIT_PER_MINUTE: '10'
     }
   }]
