@@ -136,7 +136,10 @@ function updateConfig(sid, changes) {
   const normalized = {};
   for (const [key, val] of Object.entries(changes)) {
     const target = ALIASES[key] || key;
-    normalized[target] = val;
+    // Normalize "none" / "" to null for optional fields
+    const nullFields = ['compressionModel', 'fallbackModel', 'voice'];
+    const normalizedVal = nullFields.includes(target) && (val === 'none' || val === '') ? null : val;
+    normalized[target] = normalizedVal;
   }
   // Deep merge: arrays replace, strings/objects merge
   for (const [key, val] of Object.entries(normalized)) {
