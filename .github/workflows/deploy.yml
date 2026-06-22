@@ -8,27 +8,28 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Deploy to Droplet
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: root
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          source: "server.js,package.json,ecosystem.config.js"
-          target: "/var/www/cem888.ai/concierge/"
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "${{ secrets.DROPLET_HOST }} ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBGrahJ5LfDm0BMk4K3X6pGrz6Zq7GpQp0HnN4qKjqA0oNvjO8rGt1LHkUvKzWxCy0n5O7lCqVvGpXm0yM=" > ~/.ssh/known_hosts 2>/dev/null || ssh-keyscan -H ${{ secrets.DROPLET_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Deploy files
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.DROPLET_HOST }} "cat > /var/www/cem888.ai/concierge/server.js" < server.js
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.DROPLET_HOST }} "cat > /var/www/cem888.ai/concierge/package.json" < package.json
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.DROPLET_HOST }} "cat > /var/www/cem888.ai/concierge/ecosystem.config.js" < ecosystem.config.js
 
       - name: Restart Concierge
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: root
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          script: |
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key root@${{ secrets.DROPLET_HOST }} << 'REMOTE'
+            set -e
             cd /var/www/cem888.ai/concierge
             npm install --production 2>/dev/null || true
             pm2 restart cem-concierge --update-env || pm2 start ecosystem.config.js
             pm2 save
             echo "[deploy] Concierge updated at $(date)"
+          REMOTE
